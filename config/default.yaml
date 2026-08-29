@@ -1,0 +1,45 @@
+# Lunar Image Registration RAG Pipeline — Default Configuration
+
+project:
+  name: lunar-registration-rag
+  version: "0.1.0"
+
+sensors:
+  OHRC:
+    resolution_m: 0.25
+    bands: 1
+    description: "Orbiter High Resolution Camera strip"
+  TMC2:
+    resolution_m: 5.0
+    bands: 1
+    description: "Terrain Mapping Camera-2 ortho-image"
+  IIRS:
+    resolution_m: 80.0
+    bands: 64
+    description: "Imaging Infrared Spectrometer spectral cube slice"
+
+pipeline:
+  feature_extractors:
+    - phase_congruency
+    - contour
+    - deep_embedding
+  matcher: semi_dense
+  geometric_estimator: magsac
+  min_tie_points: 50
+  target_rmse_px: 0.5
+
+rag:
+  embedding_model: all-MiniLM-L6-v2
+  collection_name: lunar_registration_kb
+  top_k: 5
+  knowledge_base_path: data/knowledge_base
+
+mpp:
+  metrics:
+    - registration_rmse
+    - tie_point_uniformity
+    - matching_inlier_ratio
+    - sub_pixel_accuracy
+    - stage_latency
+    - rag_retrieval_relevance
+  report_path: outputs/mpp_report.json

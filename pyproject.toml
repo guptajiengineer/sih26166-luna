@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lunar-registration-rag"
+version = "0.1.0"
+description = "RAG-augmented multi-sensor lunar image registration pipeline"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24.0",
+    "opencv-python-headless>=4.8.0",
+    "scipy>=1.11.0",
+    "scikit-image>=0.22.0",
+    "pyyaml>=6.0",
+    "click>=8.1.0",
+    "pydantic>=2.5.0",
+    "networkx>=3.1",
+]
+
+[project.optional-dependencies]
+rag = ["chromadb>=0.4.22", "sentence-transformers>=2.2.2"]
+deep = ["torch>=2.0.0", "torchvision>=0.15.0"]
+dev = ["pytest>=7.4.0", "pytest-cov>=4.1.0"]
+
+[project.scripts]
+lunar-register = "src.main:cli"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*", "data*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
